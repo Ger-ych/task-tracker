@@ -12,6 +12,7 @@ use Yii;
  * @property string $title
  * @property string|null $text
  * @property int|null $developer_id
+ * @property int|null $is_done
  *
  * @property User $developer
  * @property Project $project
@@ -33,7 +34,7 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['project_id', 'title'], 'required'],
-            [['project_id', 'developer_id'], 'integer'],
+            [['project_id', 'developer_id', 'is_done'], 'integer'],
             [['text'], 'string'],
             [['title'], 'string', 'max' => 255],
             [['developer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['developer_id' => 'id']],
@@ -52,6 +53,7 @@ class Task extends \yii\db\ActiveRecord
             'title' => 'Title',
             'text' => 'Text',
             'developer_id' => 'Developer ID',
+            'is_done' => 'Is Done',
         ];
     }
 
