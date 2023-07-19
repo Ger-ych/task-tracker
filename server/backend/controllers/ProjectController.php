@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Project;
 use common\models\ProjectSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,7 +21,17 @@ class ProjectController extends Controller
     {
         return array_merge(
             parent::behaviors(),
-            [
+            [   
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['canAdmin'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
