@@ -8,7 +8,6 @@ $this->title = 'My Yii Application';
 
     <div class="jumbotron text-center bg-transparent">
         <h1 class="display-4">Admin Panel</h1>
-        <p><a class="btn btn-lg btn-outline-secondary w-100" href="<?= \yii\helpers\Url::to(['user/index']) ?>">Users &raquo;</a></p>
         <p><a class="btn btn-lg btn-outline-secondary w-100" href="<?= \yii\helpers\Url::to(['project/index']) ?>">Projects &raquo;</a></p>
         <p><a class="btn btn-lg btn-outline-secondary w-100" href="<?= \yii\helpers\Url::to(['task/index']) ?>">Tasks &raquo;</a></p>
     </div>
