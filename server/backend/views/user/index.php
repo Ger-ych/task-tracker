@@ -42,6 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'verification_token',
             //'git_profile_link:ntext',
             [
+                'attribute' => 'role',
+                'value' => function ($model) {
+                    $roles = Yii::$app->authManager->getRolesByUser($model->id);
+                    return implode(', ', array_keys($roles));
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);

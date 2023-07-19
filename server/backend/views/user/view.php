@@ -40,6 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             // 'verification_token',
             'git_profile_link:ntext',
+            [
+                'attribute' => 'role',
+                'value' => function ($model) {
+                    $roles = Yii::$app->authManager->getRolesByUser($model->id);
+                    return implode(', ', array_keys($roles));
+                },
+            ],
         ],
     ]) ?>
 
