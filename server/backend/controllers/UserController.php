@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\UserCreateForm;
+use backend\models\UserUpdateForm;
 use common\models\User;
 use common\models\UserSearch;
 use yii\web\Controller;
@@ -90,13 +91,15 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $user = $this->findModel($id);
+        $model = new UserUpdateForm($user);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->update()) {
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
+            'user' => $user,
             'model' => $model,
         ]);
     }
