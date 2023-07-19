@@ -12,7 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'username') ?>
+
+    <?= $form->field($model, 'email') ?>
+
+    <?= $form->field($model, 'git_profile_link') ?>
+
+    <?= $form->field($model, 'password')->passwordInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
