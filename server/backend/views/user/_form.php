@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'git_profile_link') ?>
 
+    <?= $form->field($model, 'role')->dropDownList($model->getRoleOptions(), ['prompt' => 'Select Role']) ?>
+
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <div class="form-group">

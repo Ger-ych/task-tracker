@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use yii\helpers\ArrayHelper;
 
 /**
  * User update form
@@ -15,6 +16,7 @@ class UserUpdateForm extends Model
     public $email;
     public $git_profile_link;
     public $password;
+    public $role;
 
     private $_user;
 
@@ -30,6 +32,8 @@ class UserUpdateForm extends Model
         $this->username = $user->username;
         $this->email = $user->email;
         $this->git_profile_link = $user->git_profile_link;
+
+        $this->role = $this->getUserRole();
 
         parent::__construct($config);
     }
@@ -55,6 +59,9 @@ class UserUpdateForm extends Model
             ['git_profile_link', 'string'],
 
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+
+            ['role', 'required'],
+            ['role', 'in', 'range' => array_keys($this->getRoleOptions())],
         ];
     }
 
@@ -80,6 +87,41 @@ class UserUpdateForm extends Model
             $user->setPassword($this->password);
         }
 
-        return $user->save();
+        if ($user->save()) {
+            $auth = Yii::$app->authManager;
+            $role = $auth->getRole($this->role);
+            $auth->revokeAll($user->id);
+            $auth->assign($role, $user->id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get available role options for the dropdown.
+     *
+     * @return array
+     */
+    public function getRoleOptions()
+    {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+        return ArrayHelper::map($roles, 'name', 'name');
+    }
+
+    /**
+     * Get the user's current role.
+     *
+     * @return string|null
+     */
+    private function getUserRole()
+    {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($this->_user->id);
+        if (!empty($roles)) {
+            return array_keys($roles)[0];
+        }
+        return null;
     }
 }

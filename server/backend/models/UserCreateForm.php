@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use yii\helpers\ArrayHelper;
 
 /**
  * User create form
@@ -15,6 +16,7 @@ class UserCreateForm extends Model
     public $email;
     public $git_profile_link;
     public $password;
+    public $role;
 
 
     /**
@@ -38,6 +40,9 @@ class UserCreateForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+
+            ['role', 'required'],
+            ['role', 'in', 'range' => array_keys($this->getRoleOptions())],
         ];
     }
 
@@ -49,7 +54,7 @@ class UserCreateForm extends Model
     public function create()
     {
         if (!$this->validate()) {
-            return null;
+            return false;
         }
         
         $user = new User();
@@ -59,6 +64,25 @@ class UserCreateForm extends Model
         $user->generateAuthKey();
         $user->git_profile_link = $this->git_profile_link;
 
-        return $user->save();
+        if ($user->save()) {
+            $auth = Yii::$app->authManager;
+            $role = $auth->getRole($this->role);
+            $auth->assign($role, $user->id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get available role options for the dropdown.
+     *
+     * @return array
+     */
+    public function getRoleOptions()
+    {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+        return ArrayHelper::map($roles, 'name', 'name');
     }
 }
