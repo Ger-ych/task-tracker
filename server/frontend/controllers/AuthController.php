@@ -29,15 +29,18 @@ class AuthController extends Controller
             throw new UnauthorizedHttpException('Неверное имя пользователя или пароль.');
         }
 
-        // $token = Token::generateToken($user->id);
-        // $token->save();
+        $token = $user->access_token;
+        if (empty($token)) {
+            $user->generateAccessToken();
+            $token = $user->access_token;
+        }
 
         $role = Yii::$app->authManager->getRolesByUser($user->id);
         $roleName = reset($role)->name;
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
-            // 'token' => $token->token,
+            'token' => $token,
             'username' => $user->username,
             'role' => $roleName,
         ];
