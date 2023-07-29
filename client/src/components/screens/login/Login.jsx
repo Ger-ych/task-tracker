@@ -5,7 +5,8 @@ import { AuthService } from '../../services/auth.service';
 import { useState } from 'react';
 
 const Login = () => {
-    const [error, setError] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const {register, reset, handleSubmit, formState: {errors}} = useForm({
         mode: 'onChange'
@@ -13,13 +14,23 @@ const Login = () => {
 
     const handleLogin = async (formData) => {
         try {
-            const {token, username, role} = AuthService.login(formData);
-            
-            setError('');
-            console.log('Успешная авторизация!', token, username, role);
-        } catch (err) {
-            reset({ password: '' });
-            setError('Неверное имя пользователя или пароль!');
+            setIsLoading(true);
+            setLoginError('');
+
+            const response = await AuthService.login(formData);
+        
+            if (response.status === 200) {
+                window.location.href = '/';
+            }
+        }
+        catch(error) {
+            console.log(error.message);
+
+            reset({'password': ''});
+            setLoginError('Неправильное имя пользователя или пароль!');
+        }
+        finally {
+            setIsLoading(false);
         }
     };
     
@@ -53,9 +64,18 @@ const Login = () => {
                     <ErrorMessage error={errors?.password?.message} />
                 </div>
 
-                <button className="btn btn-primary w-100 py-2 my-3" type="submit">Войти</button>
+                {isLoading ? (
+                <button className="btn btn-primary w-100 py-2 my-3" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                    <span role="status">Вход...</span>
+                </button>
+                ) : (
+                <button className="btn btn-primary w-100 py-2 my-3" type="submit">
+                    Войти
+                </button>
+                )}
 
-                {error && <ErrorMessage error={error} />}
+                {loginError && <ErrorMessage error={loginError} />}
             </form>
         </main>
     )

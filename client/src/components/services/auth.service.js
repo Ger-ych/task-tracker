@@ -12,6 +12,6 @@ export const AuthService = {
             }
         });
 
-        return response.data;
+        return response;
     }
 }
