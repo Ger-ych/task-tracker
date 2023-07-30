@@ -40,10 +40,14 @@ class AuthController extends Controller
             $user->generateAccessToken();
             $token = $user->access_token;
         }
+
+        $role = Yii::$app->authManager->getRolesByUser($user->id);
+        $roleName = reset($role)->name;
         
         return [
             'token' => $token,
             'username' => $user->username,
+            'role' => $roleName,
         ];
     }
 }

@@ -2,7 +2,7 @@ const ErrorMessage = ({ error }) => {
     if (!error) return null
 
     return (
-        <div className="alert alert-warning w-100 mb-0" role="alert">
+        <div className="p-1 text-danger w-100 mb-0 rounded">
             {error}
         </div>
     )

@@ -1,10 +1,15 @@
 import { useForm } from 'react-hook-form'
-import '../../../assets/styles/login.css'
-import ErrorMessage from '../../ui/ErrorMessage'
-import { AuthService } from '../../services/auth.service';
 import { useState } from 'react';
 
+import ErrorMessage from '../../ui/ErrorMessage'
+import { AuthService } from '../../../services/auth.service';
+import { useAuth } from "../../../hooks/useAuth"
+
+import '../../../assets/styles/login.css'
+
 const Login = () => {
+    const {user, setUser} = useAuth();
+
     const [loginError, setLoginError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -20,6 +25,7 @@ const Login = () => {
             const response = await AuthService.login(formData);
         
             if (response.status === 200) {
+                setUser(response.data);
                 window.location.href = '/';
             }
         }
@@ -37,8 +43,10 @@ const Login = () => {
     return (
         <main className="h-100 d-flex align-items-center justify-content-center">
             <form className='form-signin w-100 m-auto' onSubmit={handleSubmit(handleLogin)}>
-                <img className="mb-4" src="./favicon.png" alt="" width="54" height="54" />
-                <h1 className="h3 mb-3 fw-normal">Вход</h1>
+                <div className="text-center">
+                    <img className="mb-2" src="./favicon.png" alt="" width="54" height="54" />
+                    <h1 className="h3 mb-3 fw-normal">Вход</h1>
+                </div>
 
                 <div className="form-floating mb-3">
                     <input
