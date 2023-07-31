@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAuth } from "../../../hooks/useAuth"
+import { withAuth } from '../../../HOC/withAuth';
 import Header from '../../ui/Header';
 
 const Home = () => {
@@ -18,4 +19,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default withAuth(Home)

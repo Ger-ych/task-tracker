@@ -1,14 +1,17 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import ErrorMessage from '../../ui/ErrorMessage'
 import { AuthService } from '../../../services/auth.service';
 import { useAuth } from "../../../hooks/useAuth"
+import { withoutAuth } from '../../../HOC/withoutAuth';
+import ErrorMessage from '../../ui/ErrorMessage'
 
 import '../../../assets/styles/login.css'
 
 const Login = () => {
     const { setUser } = useAuth();
+    const navigate = useNavigate();
 
     const [loginError, setLoginError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +29,7 @@ const Login = () => {
         
             if (response.status === 200) {
                 setUser(response.data);
-                window.location.href = '/';
+                navigate("/");
             }
         }
         catch(error) {
@@ -89,4 +92,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default withoutAuth(Login)
