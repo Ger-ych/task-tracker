@@ -8,7 +8,7 @@ import { useAuth } from "../../../hooks/useAuth"
 import '../../../assets/styles/login.css'
 
 const Login = () => {
-    const {user, setUser} = useAuth();
+    const { setUser } = useAuth();
 
     const [loginError, setLoginError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
