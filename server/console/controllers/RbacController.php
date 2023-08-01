@@ -3,37 +3,82 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
+use common\models\User;
+use yii\helpers\Console;
 
 class RbacController extends Controller
 {
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
+        
+        if (!$auth->getRole('admin')) {
+            $admin = $auth->createRole('admin');
+            $admin->description = 'Администратор';
+            $auth->add($admin);
+        }
+        else {
+            $admin = $auth->getRole('admin');
+        }
 
-        $admin = $auth->createRole('admin');
-        $admin->description = 'Администратор';
-        $auth->add($admin);
+        if (!$auth->getRole('manager')) {
+            $manager = $auth->createRole('manager');
+            $manager->description = 'Менеджер';
+            $auth->add($manager);
+        }
+        else {
+            $manager = $auth->getRole('manager');
+        }
 
-        $manager = $auth->createRole('manager');
-        $manager->description = 'Менеджер';
-        $auth->add($manager);
+        if (!$auth->getRole('developer')) {
+            $developer = $auth->createRole('developer');
+            $developer->description = 'Разработчик';
+            $auth->add($developer);
+        }
+        else {
+            $developer = $auth->getRole('developer');
+        }
 
-        $developer = $auth->createRole('developer');
-        $developer->description = 'Разработчик';
-        $auth->add($developer);
+        if (!$auth->getPermission('canAdmin')) {
+            $canAdmin = $auth->createPermission('canAdmin');
+            $canAdmin->description = 'Право входа в административную часть';
+            $auth->add($canAdmin);
+        }
+        else {
+            $canAdmin = $auth->getPermission('canAdmin');
+        }
 
-        $canAdmin = $auth->createPermission('canAdmin');
-        $canAdmin->description = 'Право входа в административную часть';
-        $auth->add($canAdmin);
-
-        $auth->addChild($admin, $canAdmin);
+        if (!$auth->hasChild($admin, $canAdmin)) {
+            $auth->addChild($admin, $canAdmin);
+        } 
     }
 
-    public function actionSetAdmin($userId)
+    public function actionCreateAdmin($username, $email, $password)
     {
-        $auth = Yii::$app->authManager;
+        $user = new User([
+            'username' => $username,
+            'email' => $email,
+        ]);
 
-        $admin = $auth->getRole('admin');
-        $auth->assign($admin, $userId);
+        $user->setPassword($password);
+        $user->generateAuthKey();
+
+        if (!$user->save()) {
+            $this->stderr("Ошибка при создании пользователя: \n");
+            foreach ($user->getErrors() as $errors) {
+                foreach ($errors as $error) {
+                    $this->stderr("- $error\n", Console::FG_RED);
+                }
+            }
+            return 1;
+        }
+
+        $auth = Yii::$app->authManager;
+        $adminRole = $auth->getRole('admin');
+        $auth->assign($adminRole, $user->getId());
+
+        $this->stdout("Пользователь '{$user->username}' успешно создан и назначен администратором.\n", Console::FG_GREEN);
+
+        return 0;
     }
 }
