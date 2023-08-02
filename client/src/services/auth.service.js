@@ -1,12 +1,9 @@
 import axios from 'axios'
-
-const domain = 'http://api.tasktracker.loc'
-
-const login_url = '/auth/login/'
+import config from './config/config';
 
 export const AuthService = {
     async login(data) {
-        const response = await axios.post(domain+login_url, data, {
+        const response = await axios.post(config.login_url, data, {
             headers: {
                 'content-type': 'multipart/form-data',
             }

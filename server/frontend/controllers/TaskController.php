@@ -56,7 +56,7 @@ class TaskController extends Controller
             if ($project) {
                 $taskData['project_name'] = $project->name;
             } else {
-                $taskData['project_name'] = 'Unnamed';
+                $taskData['project_name'] = 'Unknown';
             }
             $tasksWithProjectName[] = $taskData;
         }

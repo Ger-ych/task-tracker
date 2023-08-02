@@ -35,7 +35,7 @@ const Header = () => {
                             <p className='fs-5 mb-0 ms-1'>{user?.username}</p>
                         </a>
                         <ul className="dropdown-menu text-small text-center">
-                            <li><a className="dropdown-item" href='' onClick={handleLogout}><i class="fa-solid fa-right-from-bracket"></i> Выйти</a></li>
+                            <li><a className="dropdown-item" href='' onClick={handleLogout}><i className="fa-solid fa-right-from-bracket"></i> Выйти</a></li>
                         </ul>
                     </div>
                 </div>
