@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
+use common\models\Project;
 
 /**
  * Task controller
@@ -48,6 +49,18 @@ class TaskController extends Controller
         $user = Yii::$app->user->identity;
         $tasks = $user->getTasks()->all();
 
-        return $tasks;
+        $tasksWithProjectName = [];
+        foreach ($tasks as $task) {
+            $taskData = $task->toArray();
+            $project = Project::findOne($task->project_id);
+            if ($project) {
+                $taskData['project_name'] = $project->name;
+            } else {
+                $taskData['project_name'] = 'Unnamed';
+            }
+            $tasksWithProjectName[] = $taskData;
+        }
+
+        return $tasksWithProjectName;
     }
 }
