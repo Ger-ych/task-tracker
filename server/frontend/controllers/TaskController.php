@@ -45,8 +45,9 @@ class TaskController extends Controller
 
     public function actionList()
     {
-        return [
-            'vseok' => 'true'
-        ];
+        $user = Yii::$app->user->identity;
+        $tasks = $user->getTasks()->all();
+
+        return $tasks;
     }
 }
