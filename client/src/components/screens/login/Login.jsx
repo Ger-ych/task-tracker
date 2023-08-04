@@ -33,7 +33,7 @@ const Login = () => {
             }
         }
         catch(error) {
-            console.log(error.message);
+            console.error(error.message);
 
             reset({'password': ''});
             setLoginError('Неправильное имя пользователя или пароль!');

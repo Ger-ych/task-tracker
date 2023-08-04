@@ -3,12 +3,19 @@ import config from './config/config';
 
 export const AuthService = {
     async login(data) {
-        const response = await axios.post(config.login_url, data, {
-            headers: {
-                'content-type': 'multipart/form-data',
-            }
-        });
+        const headers = {
+            'content-type': 'multipart/form-data',
+        }
 
+        const response = await axios.post(config.login_url, data, { headers });
         return response;
+    },
+    async info(access_token) {
+        const headers = {
+            'Authorization': `Bearer ${access_token}`,
+        }
+        
+        const response = await axios.get(config.user_info_url, { headers });
+        return response.data;
     }
 }

@@ -37,15 +37,6 @@ class AuthController extends Controller
             ],
         ];
     }
-    
-    public function beforeAction($action)
-    {   
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
-        
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
-    }
 
     public function actionLogin()
     {   

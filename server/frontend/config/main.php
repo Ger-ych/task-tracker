@@ -12,11 +12,23 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'response' => [
+            'format' => 'json',
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
+        ],
+        'corsFilter' => [
+            'class' => \yii\filters\Cors::class,
+            'cors' => [
+                'Origin' => ['*'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -45,6 +57,14 @@ return [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+    ],
+    'as cors' => [
+        'class' => \yii\filters\Cors::class,
+        'cors' => [
+            'Origin' => ['*'],
+            'Access-Control-Request-Method' => ['GET', 'POST', 'OPTIONS'],
+            'Access-Control-Request-Headers' => ['*'],
         ],
     ],
     'params' => $params,

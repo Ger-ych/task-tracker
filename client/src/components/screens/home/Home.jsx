@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
+import { AuthService } from '../../../services/auth.service';
 import { useAuth } from "../../../hooks/useAuth"
-import { withAuth } from '../../../HOC/withAuth';
+import { withAuth } from '../../../HOC/withAuth'
 import Header from '../../ui/Header';
 
 const Home = () => {
     const { user } = useAuth();
+
+    useEffect(() => {
+        async function getUserInfo() {
+            try {
+                const user_info = await AuthService.info(user.token);
+                console.log(user_info);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        getUserInfo();
+    }, [user.token]);
 
     return (
         <main className='container'>
