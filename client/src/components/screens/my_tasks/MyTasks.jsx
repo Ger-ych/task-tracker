@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useAuth } from "../../../hooks/useAuth"
+import { onlyDeveloper } from '../../../HOC/onlyDeveloper'
 import Header from '../../ui/Header';
 import Loading from "../../ui/Loading";
 
@@ -16,4 +17,4 @@ const MyTasks = () => {
     )
 }
 
-export default MyTasks
+export default onlyDeveloper(MyTasks)

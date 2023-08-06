@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { Link } from "react-router-dom"
 
 const Header = () => {
-    const { user, logout } = useAuth();
+    const { user, isDeveloper, logout } = useAuth();
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -23,10 +23,11 @@ const Header = () => {
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li><Link className="nav-link px-2 link-body-emphasis" to="/">Главная</Link></li>
 
-                        <li><a href="#" className="nav-link px-2 link-body-emphasis">Мои задачи</a></li>
-                        
-                        <li><a href="#" className="nav-link px-2 link-body-emphasis">Проекты</a></li>
-                        <li><a href="#" className="nav-link px-2 link-body-emphasis">Разработчики</a></li>
+                        {isDeveloper() && (
+                            <>
+                            <li><Link className="nav-link px-2 link-body-emphasis" to="/tasks">Мои задачи</Link></li>
+                            </>
+                        )}
                     </ul>
 
                     <div className="dropdown text-end">
