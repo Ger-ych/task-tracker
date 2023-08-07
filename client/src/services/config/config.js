@@ -4,6 +4,9 @@ const config = {
     // auth service
     login_url: `${domain}/auth/login/`,
     user_info_url: `${domain}/auth/info/`,
+
+    // task service
+    my_tasks_url: `${domain}/task/list/`,
 };
-  
+
 export default config;

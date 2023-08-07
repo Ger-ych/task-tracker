@@ -10,7 +10,7 @@ export const AuthService = {
         const response = await axios.post(config.login_url, data, { headers });
         return response;
     },
-    async info(access_token) {
+    async getUserInfo(access_token) {
         const headers = {
             'Authorization': `Bearer ${access_token}`,
         }

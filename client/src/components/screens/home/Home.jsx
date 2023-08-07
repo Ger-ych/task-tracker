@@ -14,7 +14,7 @@ const Home = () => {
     useEffect(() => {
         async function getUserInfo() {
             try {
-                const user_info = await AuthService.info(user.token);
+                const user_info = await AuthService.getUserInfo(user.token);
                 setUserInfo(user_info);
             } catch (error) {
                 console.error(error.message);
