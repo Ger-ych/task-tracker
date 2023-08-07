@@ -45,9 +45,11 @@ class TaskController extends Controller
             $taskData = $task->toArray();
             $project = Project::findOne($task->project_id);
             if ($project) {
-                $taskData['project_name'] = $project->name;
+                $taskData['project']['name'] = $project->name;
+                $taskData['project']['repo_link'] = $project->repo_link;
             } else {
-                $taskData['project_name'] = 'Unknown';
+                $taskData['project']['name'] = 'Unknown';
+                $taskData['project']['repo_link'] = 'Unknown';
             }
             $tasksWithProjectName[] = $taskData;
         }
