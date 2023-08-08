@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 use common\models\Project;
+use common\models\Task;
 
 /**
  * Task controller
@@ -25,7 +26,7 @@ class TaskController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['list'],
+                            'actions' => ['list', 'done'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -55,5 +56,32 @@ class TaskController extends Controller
         }
 
         return $tasksWithProjectName;
+    }
+
+    public function actionDone($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        $user = Yii::$app->user->identity;
+        if ($task->developer_id !== $user->id) {
+            Yii::$app->response->setStatusCode(403);
+            
+            return [
+                'error' => 'У вас недостаточно прав для выполнения данного действия.',
+            ];
+        }
+
+        // $task->is_done = 1;
+        // $task->save();
+
+        return [];
     }
 }
