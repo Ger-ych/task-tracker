@@ -79,8 +79,8 @@ class TaskController extends Controller
             ];
         }
 
-        // $task->is_done = 1;
-        // $task->save();
+        $task->is_done = 1;
+        $task->save();
 
         return [];
     }
