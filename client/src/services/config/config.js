@@ -1,6 +1,7 @@
-const domain = 'http://api.tasktracker.loc'
+export const admin_domain = 'http://admin.tasktracker.loc'
+export const domain = 'http://api.tasktracker.loc'
 
-const config = {
+const config = {    
     // auth service
     login_url: `${domain}/auth/login/`,
     user_info_url: `${domain}/auth/info/`,

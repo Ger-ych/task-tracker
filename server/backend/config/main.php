@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'name' => 'Tasktracker',
     'modules' => [
         'gii'=>[
             'class'=>'yii\gii\Module'
