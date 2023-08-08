@@ -8,6 +8,7 @@ const config = {
 
     // task service
     my_tasks_url: `${domain}/task/list/`,
+    task_done_url: `${domain}/task/done/`
 };
 
 export default config;
