@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use common\models\User;
 use Yii;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 
 /**
@@ -11,13 +13,29 @@ use yii\web\Controller;
  */
 class AuthController extends Controller
 {
-    public function beforeAction($action)
-    {   
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
-        
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
+    public function behaviors()
+    {
+        return [
+            'authenticator' => [
+                'class' => HttpBearerAuth::class,
+                'only' => ['info']
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['info'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function actionLogin()
@@ -48,6 +66,18 @@ class AuthController extends Controller
             'token' => $token,
             'username' => $user->username,
             'role' => $roleName,
+        ];
+    }
+
+    public function actionInfo()
+    {
+        $user = Yii::$app->user->identity;
+
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'git_profile_link' => $user->git_profile_link,
         ];
     }
 }
