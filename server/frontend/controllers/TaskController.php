@@ -38,7 +38,7 @@ class TaskController extends Controller
     public function actionList()
     {
         $user = Yii::$app->user->identity;
-        $tasks = $user->getTasks()->all();
+        $tasks = $user->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
 
         $tasksWithProjectName = [];
         foreach ($tasks as $task) {
@@ -47,9 +47,9 @@ class TaskController extends Controller
             if ($project) {
                 $taskData['project']['name'] = $project->name;
                 $taskData['project']['repo_link'] = $project->repo_link;
+                $taskData['project']['description'] = $project->description;
             } else {
-                $taskData['project']['name'] = 'Unknown';
-                $taskData['project']['repo_link'] = 'Unknown';
+                $taskData['project'] = [];
             }
             $tasksWithProjectName[] = $taskData;
         }
