@@ -32,6 +32,7 @@ const Header = () => {
                         {(isAdmin() || isManager()) && (
                             <>
                             <li><Link className="nav-link px-2 link-body-emphasis" to="/projects">Проекты</Link></li>
+                            <li><Link className="nav-link px-2 link-body-emphasis" to="/developers">Разработчики</Link></li>
                             </>
                         )}
 
