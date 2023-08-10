@@ -12,6 +12,9 @@ const config = {
 
     // project service
     project_list_url: `${domain}/project/list/`,
+
+    // developer service
+    developer_list_url: `${domain}/developer/list/`,
 };
 
 export default config;
