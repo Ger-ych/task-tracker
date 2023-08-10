@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from './config/config';
 
-export const AuthService = {
+export const ProjectService = {
     async getProjectList(access_token) {
         const headers = {
             'Authorization': `Bearer ${access_token}`,

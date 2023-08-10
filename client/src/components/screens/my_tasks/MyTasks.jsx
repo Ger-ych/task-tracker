@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { TaskService } from '../../../services/task.service';
@@ -11,9 +11,10 @@ import { Link } from 'react-router-dom';
 
 const MyTasks = () => {
     const { user } = useAuth();
+    const [disabledButtons, setDisabledButtons] = useState({});
 
     const queryClient = useQueryClient();
-    const {data, isLoading} = useQuery(['my_tasks'], () => TaskService.getMyTasks(user.token))
+    const { data, isLoading } = useQuery(['my_tasks'], () => TaskService.getMyTasks(user.token))
 
     const setTaskDoneMutation = useMutation((taskId) => TaskService.setTaskDone(user.token, taskId), {
         onSuccess: () => {
@@ -24,9 +25,13 @@ const MyTasks = () => {
         }
     });
 
-    const handleSetTaskDone = (taskId) => {
-        
-        setTaskDoneMutation.mutate(taskId);
+    const handleSetTaskDone = async (taskId) => {
+        setDisabledButtons(prevState => ({
+            ...prevState,
+            [taskId]: true,
+        }));
+
+        setTaskDoneMutation.mutateAsync(taskId);
     };
 
     return (
@@ -73,7 +78,14 @@ const MyTasks = () => {
                                 </div>
                                 
                                 {!task.is_done ? (
-                                    <button className="btn btn-success w-100 mt-2" onClick={() => handleSetTaskDone(task.id)}>Задача выполнена <i className="fa-solid fa-check"></i></button>
+                                    disabledButtons[task.id] ? (
+                                        <button className="btn btn-success w-100 mt-2" disabled>
+                                            <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                            <span role="status">Обновление...</span>
+                                        </button>
+                                    ) : (
+                                        <button className="btn btn-success w-100 mt-2" onClick={() => handleSetTaskDone(task.id)}>Задача выполнена <i className="fa-solid fa-check"></i></button>
+                                    )
                                 ) : null}
                             </div>
                         </div>

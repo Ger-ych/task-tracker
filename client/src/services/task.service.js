@@ -14,8 +14,6 @@ export const TaskService = {
         const headers = {
             'Authorization': `Bearer ${access_token}`,
         }
-
-        console.log(access_token)
         
         const response = await axios.post(`${config.task_done_url}${task_id}`, [], { headers });
         return response.data;
