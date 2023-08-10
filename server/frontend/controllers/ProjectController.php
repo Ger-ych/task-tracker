@@ -37,7 +37,7 @@ class ProjectController extends Controller
 
     public function actionList()
     {
-        $projects = Project::find()->all();
+        $projects = Project::find()->orderBy(['id' => SORT_DESC])->all();
 
         return $projects;
     }
