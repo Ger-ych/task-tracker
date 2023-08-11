@@ -10,6 +10,14 @@ export const TaskService = {
         const response = await axios.get(config.my_tasks_url, { headers });
         return response.data;
     },
+    async getProjectTaskList(access_token, project_id) {
+        const headers = {
+            'Authorization': `Bearer ${access_token}`,
+        }
+        
+        const response = await axios.get(`${config.project_task_list_url}${project_id}`, { headers });
+        return response.data;
+    },
     async setTaskDone(access_token, task_id) {
         const headers = {
             'Authorization': `Bearer ${access_token}`,

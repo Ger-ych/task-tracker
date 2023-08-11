@@ -8,6 +8,7 @@ const config = {
 
     // task service
     my_tasks_url: `${domain}/task/list/`,
+    project_task_list_url: `${domain}/task/list-by-project?id=`,
     task_done_url: `${domain}/task/done/`,
 
     // project service
