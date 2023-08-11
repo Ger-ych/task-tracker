@@ -30,6 +30,11 @@ class TaskController extends Controller
                             'allow' => true,
                             'roles' => ['@'],
                         ],
+                        [
+                            'actions' => ['list-by-project'],
+                            'allow' => true,
+                            'roles' => ['admin', 'manager'],
+                        ],
                     ],
                 ],
             ]
@@ -41,7 +46,7 @@ class TaskController extends Controller
         $user = Yii::$app->user->identity;
         $tasks = $user->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
 
-        $tasksWithProjectName = [];
+        $tasksWithProject = [];
         foreach ($tasks as $task) {
             $taskData = $task->toArray();
             $project = Project::findOne($task->project_id);
@@ -52,10 +57,10 @@ class TaskController extends Controller
             } else {
                 $taskData['project'] = [];
             }
-            $tasksWithProjectName[] = $taskData;
+            $tasksWithProject[] = $taskData;
         }
 
-        return $tasksWithProjectName;
+        return $tasksWithProject;
     }
 
     public function actionDone($id)
@@ -83,5 +88,21 @@ class TaskController extends Controller
         $task->save();
 
         return [];
+    }
+
+    public function actionListByProject($id)
+    {
+        $project = Project::findOne($id);
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
+        $tasks = $project->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
+
+        return $tasks;
     }
 }
