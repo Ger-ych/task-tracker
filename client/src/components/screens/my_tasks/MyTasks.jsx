@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { TaskService } from '../../../services/task.service';
 import { useAuth } from "../../../hooks/useAuth"
+import { useSetTaskDone } from './useSettaskDone';
 import { onlyDeveloper } from '../../../HOC/onlyDeveloper'
 
 import Header from '../../ui/Header';
@@ -13,26 +14,8 @@ const MyTasks = () => {
     const { user } = useAuth();
     const [disabledButtons, setDisabledButtons] = useState({});
 
-    const queryClient = useQueryClient();
     const { data, isLoading } = useQuery(['my_tasks'], () => TaskService.getMyTasks(user.token))
-
-    const setTaskDoneMutation = useMutation((taskId) => TaskService.setTaskDone(user.token, taskId), {
-        onSuccess: () => {
-            queryClient.invalidateQueries('my_tasks');
-        },
-        onError: (err) => {
-            console.error(err.message)
-        }
-    });
-
-    const handleSetTaskDone = async (taskId) => {
-        setDisabledButtons(prevState => ({
-            ...prevState,
-            [taskId]: true,
-        }));
-
-        setTaskDoneMutation.mutateAsync(taskId);
-    };
+    const { setTaskDone } = useSetTaskDone(setDisabledButtons);
 
     return (
         <main className='container'>
@@ -84,7 +67,7 @@ const MyTasks = () => {
                                             <span role="status">Обновление...</span>
                                         </button>
                                     ) : (
-                                        <button className="btn btn-success w-100 mt-2" onClick={() => handleSetTaskDone(task.id)}>Задача выполнена <i className="fa-solid fa-check"></i></button>
+                                        <button className="btn btn-success w-100 mt-2" onClick={() => setTaskDone(task.id)}>Задача выполнена <i className="fa-solid fa-check"></i></button>
                                     )
                                 ) : null}
                             </div>
