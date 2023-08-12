@@ -28,12 +28,12 @@ const DeveloperList = () => {
             ) : (
                 <>
                 {
-                    data ? data.map(developer => (
+                    data.length ? data.map(developer => (
                         <div key={developer.id} className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <h3 className="mb-2">{developer.username}</h3>
                                 <div className="mb-1 text-body-secondary">Email: {developer.email}</div>
-                                <div className="mb-1 text-body-secondary">Профиль Git: <a href={developer.git_profile_link}>{developer.git_profile_link}</a></div>
+                                <div className="mb-1 text-body-secondary">Профиль GitHub: <a href={developer.git_profile_link}>{developer.git_profile_link}</a></div>
                             </div>
                         </div>
                     ))

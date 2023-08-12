@@ -2,20 +2,20 @@ import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 
 import { TaskService } from '../../../services/task.service';
+import { ProjectService } from '../../../services/project.service';
 import { useAuth } from "../../../hooks/useAuth"
-import { useSetTaskDone } from './useSettaskDone';
-import { onlyDeveloper } from '../../../HOC/onlyDeveloper'
+import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
 import Header from '../../ui/Header';
 import Loading from "../../ui/Loading";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-const MyTasks = () => {
+const ProjectTaskList = () => {
     const { user } = useAuth();
-    const [disabledButtons, setDisabledButtons] = useState({});
+    const { id } = useParams();
 
-    const { data, isLoading } = useQuery(['my_tasks'], () => TaskService.getMyTasks(user.token))
-    const { setTaskDone } = useSetTaskDone(setDisabledButtons);
+    // const { dataProject, isLoadingProject } = useQuery([`project tasks`], () => ProjectServiceService.getById(user.token, id))
+    const { data, isLoading } = useQuery([`project tasks ${id}`], () => TaskService.getProjectTaskList(user.token, id))
 
     return (
         <main className='container'>
@@ -23,7 +23,8 @@ const MyTasks = () => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">Мои задачи</li>
+                    <li className="breadcrumb-item"><Link to="/projects">Проекты</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Задачи проекта {id}</li>
                 </ol>
             </nav>
 
@@ -42,31 +43,18 @@ const MyTasks = () => {
                                         <strong className="d-inline-block mb-2 text-warning-emphasis">В работе</strong>
                                     )}
                                     <h3 className="mb-2">{task.title}</h3>
-                                    <div className="mb-1 text-body-secondary">Проект: {task.project.name}</div>
-                                    <div className="mb-1 text-body-secondary">Репозиторий: <a href={task.project.repo_link}>{task.project.repo_link}</a></div>
-                                    {!task.is_done ? (
-                                        disabledButtons[task.id] ? (
-                                            <button className="btn btn-success w-100 mt-2" disabled>
-                                                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-                                                <span role="status">Обновление...</span>
-                                            </button>
-                                        ) : (
-                                            <button className="btn btn-success w-100 mt-2" onClick={() => setTaskDone(task.id)}>Задача выполнена <i className="fa-solid fa-check"></i></button>
-                                        )
-                                    ) : null}
                                 </div>
 
                                 <div className="mt-3 accordion accordion-flush" id={`accordionTask${task.id}`}>
                                     <div className="accordion-item border rounded-bottom">
                                         <h2 className="accordion-header">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#flush-collapseOne${task.id}`} aria-expanded="false" aria-controls={`flush-collapseOne${task.id}`}>
-                                            Подробнее
+                                            Описание
                                         </button>
                                         </h2>
                                         <div id={`flush-collapseOne${task.id}`} className="accordion-collapse collapse" data-bs-parent={`#accordionTask${task.id}`}>
                                             <div className="accordion-body">
-                                                <p><b>Проект ({task.project.name}):</b> {task.project.description}</p>
-                                                <p className='mb-0'><b>Описание задачи:</b><br /> {task.text}</p>
+                                                <p className='mb-0'>{task.text}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -74,7 +62,7 @@ const MyTasks = () => {
                             </div>
                         </div>
                     ))
-                    : <h3 className="">У вас нет задач</h3>
+                    : <h3 className="">У этого проекта нет задач</h3>
                 }
                 </>
             )}
@@ -82,4 +70,4 @@ const MyTasks = () => {
     )
 }
 
-export default onlyDeveloper(MyTasks)
+export default onlyAdminOrManager(ProjectTaskList)

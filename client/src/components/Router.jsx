@@ -6,6 +6,7 @@ import Home from "./screens/home/Home"
 import MyTasks from "./screens/my_tasks/MyTasks"
 import ProjectList from "./screens/project_list/ProjectList"
 import DeveloperList from "./screens/developer_list/DeveloperList"
+import ProjectTaskList from "./screens/project_task_list/ProjectTaskList"
 
 const Router = () => {
     return (
@@ -17,6 +18,7 @@ const Router = () => {
 
                 <Route element={<ProjectList />} path="/projects" />
                 <Route element={<DeveloperList />} path="/developers" />
+                <Route element={<ProjectTaskList />} path="/projects/:id/tasks" />
 
                 <Route element={<Login />} path="/login" />
 
