@@ -25,7 +25,7 @@ class ProjectController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['list'],
+                            'actions' => ['list', 'view'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -40,5 +40,12 @@ class ProjectController extends Controller
         $projects = Project::find()->orderBy(['id' => SORT_DESC])->all();
 
         return $projects;
+    }
+
+    public function actionView($id)
+    {
+        $project = Project::findOne($id);
+
+        return $project;
     }
 }
