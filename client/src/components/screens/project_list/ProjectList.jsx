@@ -32,7 +32,7 @@ const ProjectList = () => {
                         <div key={project.id} className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-0 d-flex flex-column position-static">
                                 <div className="px-4 pt-4">
-                                    <h3 className="mb-2">{project.name}</h3>
+                                    <h3 className="mb-2">{project.id}. {project.name}</h3>
                                     <div className="mb-1 text-body-secondary">Репозиторий: <a href={project.repo_link}>{project.repo_link}</a></div>
                                     <Link className='btn btn-sm btn-success' to={`/projects/${project.id}/tasks`}>Задачи »</Link>
                                 </div>
