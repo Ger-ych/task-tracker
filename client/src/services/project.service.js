@@ -9,5 +9,13 @@ export const ProjectService = {
 
         const response = await axios.get(config.project_list_url, { headers });
         return response.data;
+    },
+    async deleteProject(access_token, project_id) {
+        const headers = {
+            'Authorization': `Bearer ${access_token}`,
+        }
+
+        const response = await axios.post(`${config.project_delete_url}${project_id}`, [], { headers });
+        return response.data;
     }
 }

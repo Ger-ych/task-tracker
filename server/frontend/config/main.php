@@ -57,6 +57,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'task/done/<id:\d+>' => 'task/done',
+                'project/delete/<id:\d+>' => 'project/delete',
             ],
         ],
     ],

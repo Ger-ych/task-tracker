@@ -13,6 +13,7 @@ const config = {
 
     // project service
     project_list_url: `${domain}/project/list/`,
+    project_delete_url: `${domain}/project/delete/`,
 
     // developer service
     developer_list_url: `${domain}/developer/list/`,
