@@ -25,7 +25,7 @@ class ProjectController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['list', 'view'],
+                            'actions' => ['list', 'view', 'delete'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -46,6 +46,31 @@ class ProjectController extends Controller
     {
         $project = Project::findOne($id);
 
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
         return $project;
+    }
+
+    public function actionDelete($id)
+    {
+        $project = Project::findOne($id);
+
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
+        $project->delete();
+
+        return [];
     }
 }
