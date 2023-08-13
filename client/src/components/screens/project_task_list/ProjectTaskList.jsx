@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 
 import { TaskService } from '../../../services/task.service';
-import { ProjectService } from '../../../services/project.service';
 import { useAuth } from "../../../hooks/useAuth"
+import { useDeleteTask } from './useDeleteTask';
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
 import Header from '../../ui/Header';
@@ -13,9 +13,10 @@ import { Link, useParams } from 'react-router-dom';
 const ProjectTaskList = () => {
     const { user } = useAuth();
     const { id } = useParams();
+    const [disabledButtons, setDisabledButtons] = useState({});
 
-    // const { dataProject, isLoadingProject } = useQuery([`project tasks`], () => ProjectServiceService.getById(user.token, id))
     const { data, isLoading } = useQuery([`project tasks ${id}`], () => TaskService.getProjectTaskList(user.token, id))
+    const { deleteTask } = useDeleteTask(setDisabledButtons);
 
     return (
         <main className='container'>
@@ -43,6 +44,14 @@ const ProjectTaskList = () => {
                                         <strong className="d-inline-block mb-2 text-warning-emphasis">В работе</strong>
                                     )}
                                     <h3 className="mb-2">{task.title}</h3>
+                                    {disabledButtons[task.id] ? (
+                                        <button className="btn btn-sm btn-danger mt-2" disabled>
+                                            <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                            <span role="status">Удаление...</span>
+                                        </button>
+                                    ) : (
+                                        <button className="btn btn-sm btn-danger mt-2" onClick={() => deleteTask(task.id)}>Удалить <i className="fa-solid fa-trash"></i></button>
+                                    )}
                                 </div>
 
                                 <div className="mt-3 accordion accordion-flush" id={`accordionTask${task.id}`}>
