@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectService } from '../../../services/project.service';
 import { useAuth } from "../../../hooks/useAuth"
@@ -10,46 +10,67 @@ import ErrorMessage from '../../ui/ErrorMessage'
 import Header from '../../ui/Header';
 
 import '../../../assets/styles/form.css'
+import Loading from '../../ui/Loading';
 
-const ProjectCreate = () => {
+const ProjectUpdate = () => {
     const { user } = useAuth();
+    const { id } = useParams();
     const navigate = useNavigate();
 
-    const [createError, setCreateError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [updateError, setUpdateError] = useState('');
+    const [projectData, setProjectData] = useState(null);
+    const [isUpdating, setIsUpdating] = useState(false);
 
-    const {register, reset, handleSubmit, formState: {errors}} = useForm({
+    const {register, reset, handleSubmit, formState: {errors}, setValue} = useForm({
         mode: 'onChange'
     })
 
-    const handleProjectCreate = async (formData) => {
-        try {
-            setIsLoading(true);
-            setCreateError('');
+    useEffect(() => {
+        async function getProjectData() {
+            try {
+                const project_data = await ProjectService.getProjectData(user.token, id);
+                setProjectData(project_data);
 
-            const response = await ProjectService.createProject(user.token, formData);
+                setValue("name", project_data.name)
+                setValue("description", project_data.description)
+                setValue("repo_link", project_data.repo_link)
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        getProjectData();
+    }, [user.token]);
+
+    const handleProjectUpdate = async (formData) => {
+        try {
+            setIsUpdating(true);
+            setUpdateError('');
+
+            const response = await ProjectService.updateProject(user.token, id, formData);
         
-            if (response.status === 201) {
+            if (response.status === 200) {
                 navigate("/projects");
             }
         }
         catch(error) {
             console.error(error.message);
 
-            setCreateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
+            setUpdateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
         }
         finally {
-            setIsLoading(false);
+            setIsUpdating(false);
         }
     };
     
     return (
         <main className="h-100 d-flex align-items-center justify-content-center flex-column">
             <Header />
-            <form className='form w-100 m-auto' onSubmit={handleSubmit(handleProjectCreate)}>
+            {projectData ? (
+            <form className='form w-100 m-auto' onSubmit={handleSubmit(handleProjectUpdate)}>
                 <div className="text-center">
                     <img className="mb-2" src="/favicon.png" alt="" width="54" height="54" />
-                    <h1 className="h3 mb-3 fw-normal">Создание проекта</h1>
+                    <h1 className="h3 mb-3 fw-normal">Изменение проекта {id}</h1>
                 </div>
 
                 <div className="form-floating mb-3">
@@ -86,21 +107,26 @@ const ProjectCreate = () => {
                     <ErrorMessage error={errors?.repo_link?.message} />
                 </div>
 
-                {isLoading ? (
+                {isUpdating ? (
                 <button className="btn btn-primary w-100 py-2 my-3" type="button" disabled>
                     <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-                    <span role="status">Создание...</span>
+                    <span role="status">Отправка...</span>
                 </button>
                 ) : (
                 <button className="btn btn-primary w-100 py-2 my-3" type="submit">
-                    Создать
+                    Отправить
                 </button>
                 )}
 
-                {createError && <ErrorMessage error={createError} />}
+                {updateError && <ErrorMessage error={updateError} />}
             </form>
+            ) : (
+                <div className="w-100 m-auto">
+                    <Loading />
+                </div>
+            )}
         </main>
     )
 }
 
-export default onlyAdminOrManager(ProjectCreate)
+export default onlyAdminOrManager(ProjectUpdate)

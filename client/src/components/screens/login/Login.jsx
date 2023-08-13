@@ -46,7 +46,7 @@ const Login = () => {
     
     return (
         <main className="h-100 d-flex align-items-center justify-content-center">
-            <form className='form-signin w-100 m-auto' onSubmit={handleSubmit(handleLogin)}>
+            <form className='form form-signin w-100 m-auto' onSubmit={handleSubmit(handleLogin)}>
                 <div className="text-center">
                     <img className="mb-2" src="/favicon.png" alt="" width="54" height="54" />
                     <h1 className="h3 mb-3 fw-normal">Вход</h1>

@@ -42,6 +42,7 @@ const ProjectList = () => {
                                     <div className="mb-1 text-body-secondary">Репозиторий: <a href={project.repo_link}>{project.repo_link}</a></div>
                                     <div className="d-flex flex-column align-items-baseline">
                                         <Link className='btn btn-sm btn-success mt-2' to={`/projects/${project.id}/tasks`}>Задачи »</Link>
+                                        <div className="d-flex">
                                         {disabledButtons[project.id] ? (
                                             <button className="btn btn-sm btn-danger mt-2" disabled>
                                                 <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
@@ -50,6 +51,8 @@ const ProjectList = () => {
                                         ) : (
                                             <button className="btn btn-sm btn-danger mt-2" onClick={() => deleteProject(project.id)}>Удалить <i className="fa-solid fa-trash"></i></button>
                                         )}
+                                        <Link className="btn btn-sm btn-primary ms-2 mt-2" to={`/projects/${project.id}/update/`}>Изменить »</Link>
+                                        </div>
                                     </div>
                                 </div>
 

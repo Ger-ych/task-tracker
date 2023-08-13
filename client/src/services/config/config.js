@@ -14,6 +14,7 @@ const config = {
 
     // project service
     project_list_url: `${domain}/project/list/`,
+    project_view_url: `${domain}/project/view?id=`,
     project_delete_url: `${domain}/project/delete/`,
     project_create_url: `${domain}/project/create/`,
     project_update_url: `${domain}/project/update/`,
