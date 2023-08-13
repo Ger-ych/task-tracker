@@ -26,4 +26,12 @@ export const TaskService = {
         const response = await axios.post(`${config.task_done_url}${task_id}`, [], { headers });
         return response.data;
     },
+    async deleteTask(access_token, task_id) {
+        const headers = {
+            'Authorization': `Bearer ${access_token}`,
+        }
+        
+        const response = await axios.post(`${config.delete_task_url}${task_id}`, [], { headers });
+        return response.data;
+    },
 }

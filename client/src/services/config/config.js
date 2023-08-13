@@ -10,6 +10,7 @@ const config = {
     my_tasks_url: `${domain}/task/list/`,
     project_task_list_url: `${domain}/task/list-by-project?id=`,
     task_done_url: `${domain}/task/done/`,
+    delete_task_url: `${domain}/task/delete/`,
 
     // project service
     project_list_url: `${domain}/project/list/`,
