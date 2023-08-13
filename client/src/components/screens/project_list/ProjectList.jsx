@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 
 import { ProjectService } from '../../../services/project.service';
 import { useAuth } from "../../../hooks/useAuth"
+import { useDeleteProject } from './useDeleteProject';
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
 import Header from '../../ui/Header';
@@ -11,7 +12,10 @@ import { Link } from 'react-router-dom';
 
 const ProjectList = () => {
     const { user } = useAuth();
+    const [disabledButtons, setDisabledButtons] = useState({});
+
     const {data, isLoading} = useQuery(['projects'], () => ProjectService.getProjectList(user.token))
+    const { deleteProject } = useDeleteProject(setDisabledButtons);
 
     return (
         <main className='container'>
@@ -34,7 +38,17 @@ const ProjectList = () => {
                                 <div className="px-4 pt-4">
                                     <h3 className="mb-2">{project.id}. {project.name}</h3>
                                     <div className="mb-1 text-body-secondary">Репозиторий: <a href={project.repo_link}>{project.repo_link}</a></div>
-                                    <Link className='btn btn-sm btn-success' to={`/projects/${project.id}/tasks`}>Задачи »</Link>
+                                    <div className="d-flex flex-column align-items-baseline">
+                                        <Link className='btn btn-sm btn-success mt-2' to={`/projects/${project.id}/tasks`}>Задачи »</Link>
+                                        {disabledButtons[project.id] ? (
+                                            <button className="btn btn-sm btn-danger mt-2" disabled>
+                                                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                                <span role="status">Удаление...</span>
+                                            </button>
+                                        ) : (
+                                            <button className="btn btn-sm btn-danger mt-2" onClick={() => deleteProject(project.id)}>Удалить <i className="fa-solid fa-trash"></i></button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="mt-3 accordion accordion-flush" id={`accordionProject${project.id}`}>
