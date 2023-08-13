@@ -25,7 +25,7 @@ class ProjectController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['list', 'view', 'delete'],
+                            'actions' => ['list', 'view', 'delete', 'create', 'update'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -72,5 +72,45 @@ class ProjectController extends Controller
         $project->delete();
 
         return [];
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->getRequest();
+        $project = new Project();
+
+        if ($project->load($request->getBodyParams(), '') && $project->save()) {
+            Yii::$app->response->setStatusCode(201);
+            return $project->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $project->errors,
+            ];
+        }
+    }
+
+    public function actionUpdate($id)
+    {
+        $request = Yii::$app->getRequest();
+        $project = Project::findOne($id);
+
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
+        if ($project->load($request->getBodyParams(), '') && $project->save()) {
+            Yii::$app->response->setStatusCode(200);
+            return $project->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $project->errors,
+            ];
+        }
     }
 }
