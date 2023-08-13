@@ -31,7 +31,7 @@ class TaskController extends Controller
                             'roles' => ['@'],
                         ],
                         [
-                            'actions' => ['list-by-project'],
+                            'actions' => ['list-by-project', 'delete'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -104,5 +104,22 @@ class TaskController extends Controller
         $tasks = $project->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
 
         return $tasks;
+    }
+
+    public function actionDelete($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        $task->delete();
+
+        return [];
     }
 }
