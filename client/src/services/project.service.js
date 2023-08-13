@@ -24,6 +24,6 @@ export const ProjectService = {
         }
 
         const response = await axios.post(`${config.project_create_url}`, data, { headers });
-        return response.data;
+        return response;
     },
 }

@@ -27,6 +27,8 @@ const ProjectList = () => {
                 </ol>
             </nav>
 
+            <Link to="/projects/create/" className='btn btn-md btn-success my-3'>Создать проект »</Link>
+
             {isLoading ? (
                 <Loading />
             ) : (
