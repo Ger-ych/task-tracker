@@ -17,5 +17,13 @@ export const ProjectService = {
 
         const response = await axios.post(`${config.project_delete_url}${project_id}`, [], { headers });
         return response.data;
-    }
+    },
+    async createProject(access_token, data) {
+        const headers = {
+            'Authorization': `Bearer ${access_token}`,
+        }
+
+        const response = await axios.post(`${config.project_create_url}`, data, { headers });
+        return response.data;
+    },
 }
