@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { TaskService } from '../../../services/task.service';
 import { useAuth } from "../../../hooks/useAuth"
-import { useSetTaskDone } from './useSettaskDone';
+import { useSetTaskDone } from './useSetTaskDone';
 import { onlyDeveloper } from '../../../HOC/onlyDeveloper'
 
 import Header from '../../ui/Header';
@@ -14,7 +14,7 @@ const MyTasks = () => {
     const { user } = useAuth();
     const [disabledButtons, setDisabledButtons] = useState({});
 
-    const { data, isLoading } = useQuery(['my_tasks'], () => TaskService.getMyTasks(user.token))
+    const { data, isLoading } = useQuery(['my tasks'], () => TaskService.getMyTasks(user.token))
     const { setTaskDone } = useSetTaskDone(setDisabledButtons);
 
     return (

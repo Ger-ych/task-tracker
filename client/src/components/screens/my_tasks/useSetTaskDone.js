@@ -8,7 +8,7 @@ export const useSetTaskDone = (setDisabledButtons) => {
     
     const setTaskDoneMutation = useMutation((taskId) => TaskService.setTaskDone(user.token, taskId), {
         onSuccess: () => {
-            queryClient.invalidateQueries('my_tasks');
+            queryClient.invalidateQueries('my tasks');
         },
         onError: (err) => {
             console.error(err.message)
