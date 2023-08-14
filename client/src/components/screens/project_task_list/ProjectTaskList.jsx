@@ -29,6 +29,8 @@ const ProjectTaskList = () => {
                 </ol>
             </nav>
 
+            <Link to="/tasks/create/" className='btn btn-md btn-success my-3'>Создать задание »</Link>
+
             {isLoading ? (
                 <Loading />
             ) : (

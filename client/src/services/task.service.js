@@ -48,7 +48,7 @@ export const TaskService = {
         }
         
         const response = await axios.post(config.task_create_url, data, { headers });
-        return response.data;
+        return response;
     },
     async updateTask(access_token, task_id, data) {
         const headers = {
@@ -56,6 +56,6 @@ export const TaskService = {
         }
         
         const response = await axios.post(`${config.task_update_url}${task_id}`, data, { headers });
-        return response.data;
+        return response;
     },
 }
