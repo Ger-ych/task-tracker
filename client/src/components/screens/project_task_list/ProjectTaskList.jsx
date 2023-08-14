@@ -54,6 +54,7 @@ const ProjectTaskList = () => {
                                     ) : (
                                         <button className="btn btn-sm btn-danger mt-2" onClick={() => deleteTask(task.id)}>Удалить <i className="fa-solid fa-trash"></i></button>
                                     )}
+                                    <Link className="btn btn-sm btn-primary ms-2 mt-2" to={`/tasks/${task.id}/update/`}>Изменить »</Link>
                                 </div>
 
                                 <div className="mt-3 accordion accordion-flush" id={`accordionTask${task.id}`}>

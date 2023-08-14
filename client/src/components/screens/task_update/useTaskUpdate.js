@@ -2,30 +2,30 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { TaskService } from '../../../services/task.service';
 
-export const useTaskCreate = (setIsLoading, setCreateError) => {
+export const useTaskUpdate = (id, setIsLoading, setUpdateError) => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    const taskCreate = async (formData) => {
+    const taskUpdate = async (formData) => {
         try {
             setIsLoading(true);
-            setCreateError('');
+            setUpdateError('');
 
-            const response = await TaskService.createTask(user.token, formData);
+            const response = await TaskService.updateTask(user.token, id, formData);
             
-            if (response.status === 201) {
+            if (response.status === 200) {
                 navigate(`/projects/${formData.project_id}/tasks`);
             }
         }
         catch(error) {
             console.error(error.message);
 
-            setCreateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
+            setUpdateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
         }
         finally {
             setIsLoading(false);
         }
     };
 
-    return { taskCreate }
+    return { taskUpdate }
 }

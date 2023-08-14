@@ -31,9 +31,9 @@ const ProjectUpdate = () => {
                 const project_data = await ProjectService.getProjectData(user.token, id);
                 setProjectData(project_data);
 
-                setValue("name", project_data.name)
-                setValue("description", project_data.description)
-                setValue("repo_link", project_data.repo_link)
+                setValue("name", project_data.name);
+                setValue("description", project_data.description);
+                setValue("repo_link", project_data.repo_link);
             } catch (error) {
                 console.error(error.message);
             }

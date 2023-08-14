@@ -10,6 +10,7 @@ import ProjectTaskList from "./screens/project_task_list/ProjectTaskList"
 import ProjectCreate from "./screens/project_create/ProjectCreate"
 import ProjectUpdate from "./screens/project_update/ProjectUpdate"
 import TaskCreate from "./screens/task_create/TaskCreate"
+import TaskUpdate from "./screens/task_update/TaskUpdate"
 
 const Router = () => {
     return (
@@ -19,6 +20,7 @@ const Router = () => {
 
                 <Route element={<MyTasks />} path="/my-tasks" />
                 <Route element={<TaskCreate />} path="/tasks/create" />
+                <Route element={<TaskUpdate />} path="/tasks/:id/update" />
 
                 <Route element={<ProjectList />} path="/projects" />
                 <Route element={<ProjectTaskList />} path="/projects/:id/tasks" />
