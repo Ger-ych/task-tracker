@@ -8,9 +8,9 @@ import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager';
 
 import ErrorMessage from '../../ui/ErrorMessage'
 import Header from '../../ui/Header';
+import Loading from '../../ui/Loading';
 
 import '../../../assets/styles/form.css'
-import Loading from '../../ui/Loading';
 
 const ProjectUpdate = () => {
     const { user } = useAuth();

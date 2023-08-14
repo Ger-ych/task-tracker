@@ -6,9 +6,9 @@ import { useAuth } from "../../../hooks/useAuth"
 import { useDeleteProject } from './useDeleteProject';
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
+import { Link } from 'react-router-dom';
 import Header from '../../ui/Header';
 import Loading from "../../ui/Loading";
-import { Link } from 'react-router-dom';
 
 const ProjectList = () => {
     const { user } = useAuth();

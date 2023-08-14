@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { AuthService } from '../../../services/auth.service';
 import { useAuth } from "../../../hooks/useAuth"
 import { withAuth } from '../../../HOC/withAuth'
-import Header from '../../ui/Header';
-import Loading from "../../ui/Loading";
 
+import Header from '../../ui/Header';
 
 const Home = () => {
     const { user } = useAuth();

@@ -6,9 +6,9 @@ import { useAuth } from "../../../hooks/useAuth"
 import { useDeleteTask } from './useDeleteTask';
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
+import { Link, useParams } from 'react-router-dom';
 import Header from '../../ui/Header';
 import Loading from "../../ui/Loading";
-import { Link, useParams } from 'react-router-dom';
 
 const ProjectTaskList = () => {
     const { user } = useAuth();

@@ -5,9 +5,9 @@ import { DeveloperService } from '../../../services/developer.service';
 import { useAuth } from "../../../hooks/useAuth"
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager'
 
+import { Link } from 'react-router-dom';
 import Header from '../../ui/Header';
 import Loading from "../../ui/Loading";
-import { Link } from 'react-router-dom';
 
 const DeveloperList = () => {
     const { user } = useAuth();
