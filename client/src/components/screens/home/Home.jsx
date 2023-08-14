@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { AuthService } from '../../../services/auth.service';
 import { useAuth } from "../../../hooks/useAuth"
 import { withAuth } from '../../../HOC/withAuth'
-import Header from '../../ui/Header';
-import Loading from "../../ui/Loading";
 
+import Header from '../../ui/Header';
 
 const Home = () => {
     const { user } = useAuth();
@@ -27,23 +26,25 @@ const Home = () => {
     return (
         <main className='container'>
             <Header />
-            {userInfo ? (
             <div className="p-5 mb-4 bg-body-tertiary rounded-3">
                 <div className="container-fluid py-5"> 
                     <h1 className="display-5 fw-bold">Здравствуйте, {user?.username}!</h1>
                     <p className="col-md-8 fs-4 mb-0">Роль: {user?.role}</p>
-                    
+                    {userInfo ? (
                       <>
                         <p className="col-md-8 fs-4 mb-0">ID: {userInfo.id}</p>
                         <p className="col-md-8 fs-4 mb-0">Email: {userInfo.email}</p>
                         <p className="col-md-8 fs-4 mb-0">Git: <a href={userInfo.git_profile_link}>{userInfo.git_profile_link}</a></p>
                       </>
-                    
+                    ) : (
+                        <>
+                        <p className="col-md-8 fs-4 mb-0">ID: <span className="spinner-border spinner-border-sm fs-6" aria-hidden="true"></span></p>
+                        <p className="col-md-8 fs-4 mb-0">Email: <span className="spinner-border spinner-border-sm fs-6" aria-hidden="true"></span></p>
+                        <p className="col-md-8 fs-4 mb-0">Git: <span className="spinner-border spinner-border-sm fs-6" aria-hidden="true"></span></p>
+                      </>
+                    )}
                 </div>
             </div>
-            ) : (
-                <Loading />
-            )}
         </main>
     )
 }

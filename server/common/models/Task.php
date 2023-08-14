@@ -39,6 +39,7 @@ class Task extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 255],
             [['developer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['developer_id' => 'id']],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['project_id' => 'id']],
+            ['is_done', 'default', 'value' => 0],
         ];
     }
 

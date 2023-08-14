@@ -30,6 +30,11 @@ class TaskController extends Controller
                             'allow' => true,
                             'roles' => ['@'],
                         ],
+                        [
+                            'actions' => ['list-by-project', 'delete', 'create', 'update', 'view'],
+                            'allow' => true,
+                            'roles' => ['admin', 'manager'],
+                        ],
                     ],
                 ],
             ]
@@ -41,7 +46,7 @@ class TaskController extends Controller
         $user = Yii::$app->user->identity;
         $tasks = $user->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
 
-        $tasksWithProjectName = [];
+        $tasksWithProject = [];
         foreach ($tasks as $task) {
             $taskData = $task->toArray();
             $project = Project::findOne($task->project_id);
@@ -52,10 +57,10 @@ class TaskController extends Controller
             } else {
                 $taskData['project'] = [];
             }
-            $tasksWithProjectName[] = $taskData;
+            $tasksWithProject[] = $taskData;
         }
 
-        return $tasksWithProjectName;
+        return $tasksWithProject;
     }
 
     public function actionDone($id)
@@ -83,5 +88,93 @@ class TaskController extends Controller
         $task->save();
 
         return [];
+    }
+
+    public function actionListByProject($id)
+    {
+        $project = Project::findOne($id);
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
+        $tasks = $project->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
+
+        return $tasks;
+    }
+
+    public function actionDelete($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        $task->delete();
+
+        return [];
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->getRequest();
+        $task = new Task();
+
+        if ($task->load($request->getBodyParams(), '') && $task->save()) {
+            Yii::$app->response->setStatusCode(201);
+            return $task->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $task->errors,
+            ];
+        }
+    }
+
+    public function actionUpdate($id)
+    {
+        $request = Yii::$app->getRequest();
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        if ($task->load($request->getBodyParams(), '') && $task->save()) {
+            Yii::$app->response->setStatusCode(200);
+            return $task->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $task->errors,
+            ];
+        }
+    }
+
+    public function actionView($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        return $task;
     }
 }
