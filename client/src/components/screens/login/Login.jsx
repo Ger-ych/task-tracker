@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom';
 
-import { AuthService } from '../../../services/auth.service';
-import { useAuth } from "../../../hooks/useAuth"
+import { useLogin } from './useLogin';
 import { withoutAuth } from '../../../HOC/withoutAuth';
 
 import ErrorMessage from '../../ui/ErrorMessage'
@@ -12,9 +10,6 @@ import '../../../assets/styles/form.css'
 import '../../../assets/styles/login.css'
 
 const Login = () => {
-    const { setUser } = useAuth();
-    const navigate = useNavigate();
-
     const [loginError, setLoginError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,32 +17,11 @@ const Login = () => {
         mode: 'onChange'
     })
 
-    const handleLogin = async (formData) => {
-        try {
-            setIsLoading(true);
-            setLoginError('');
-
-            const response = await AuthService.login(formData);
-        
-            if (response.status === 200) {
-                setUser(response.data);
-                navigate("/");
-            }
-        }
-        catch(error) {
-            console.error(error.message);
-
-            reset({'password': ''});
-            setLoginError('Неправильное имя пользователя или пароль!');
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
+    const { login } = useLogin(setIsLoading, setLoginError, reset)
     
     return (
         <main className="h-100 d-flex align-items-center justify-content-center">
-            <form className='form form-signin w-100 m-auto' onSubmit={handleSubmit(handleLogin)}>
+            <form className='form form-signin w-100 m-auto' onSubmit={handleSubmit(login)}>
                 <div className="text-center">
                     <img className="mb-2" src="/favicon.png" alt="" width="54" height="54" />
                     <h1 className="h3 mb-3 fw-normal">Вход</h1>
