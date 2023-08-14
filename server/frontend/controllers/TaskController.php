@@ -31,7 +31,7 @@ class TaskController extends Controller
                             'roles' => ['@'],
                         ],
                         [
-                            'actions' => ['list-by-project', 'delete', 'create', 'update'],
+                            'actions' => ['list-by-project', 'delete', 'create', 'update', 'view'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -161,5 +161,20 @@ class TaskController extends Controller
                 'errors' => $task->errors,
             ];
         }
+    }
+
+    public function actionView($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        return $task;
     }
 }
