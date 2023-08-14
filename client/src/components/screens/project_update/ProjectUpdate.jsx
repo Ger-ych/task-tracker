@@ -11,6 +11,7 @@ import Header from '../../ui/Header';
 import Loading from '../../ui/Loading';
 
 import '../../../assets/styles/form.css'
+import { useProjectUpdate } from './useProjectUpdate';
 
 const ProjectUpdate = () => {
     const { user } = useAuth();
@@ -19,9 +20,9 @@ const ProjectUpdate = () => {
 
     const [updateError, setUpdateError] = useState('');
     const [projectData, setProjectData] = useState(null);
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const {register, reset, handleSubmit, formState: {errors}, setValue} = useForm({
+    const {register, handleSubmit, formState: {errors}, setValue} = useForm({
         mode: 'onChange'
     })
 
@@ -42,32 +43,13 @@ const ProjectUpdate = () => {
         getProjectData();
     }, [user.token]);
 
-    const handleProjectUpdate = async (formData) => {
-        try {
-            setIsUpdating(true);
-            setUpdateError('');
-
-            const response = await ProjectService.updateProject(user.token, id, formData);
-        
-            if (response.status === 200) {
-                navigate("/projects");
-            }
-        }
-        catch(error) {
-            console.error(error.message);
-
-            setUpdateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
-        }
-        finally {
-            setIsUpdating(false);
-        }
-    };
+    const { projectUpdate } = useProjectUpdate(id, setIsLoading, setUpdateError);
     
     return (
         <main className="h-100 d-flex align-items-center justify-content-center flex-column">
             <Header />
             {projectData ? (
-            <form className='form w-100 m-auto' onSubmit={handleSubmit(handleProjectUpdate)}>
+            <form className='form w-100 m-auto' onSubmit={handleSubmit(projectUpdate)}>
                 <div className="text-center">
                     <img className="mb-2" src="/favicon.png" alt="" width="54" height="54" />
                     <h1 className="h3 mb-3 fw-normal">Изменение проекта {id}</h1>
@@ -107,7 +89,7 @@ const ProjectUpdate = () => {
                     <ErrorMessage error={errors?.repo_link?.message} />
                 </div>
 
-                {isUpdating ? (
+                {isLoading ? (
                 <button className="btn btn-primary w-100 py-2 my-3" type="button" disabled>
                     <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
                     <span role="status">Отправка...</span>
