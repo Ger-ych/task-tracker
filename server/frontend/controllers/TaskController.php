@@ -31,7 +31,7 @@ class TaskController extends Controller
                             'roles' => ['@'],
                         ],
                         [
-                            'actions' => ['list-by-project', 'delete'],
+                            'actions' => ['list-by-project', 'delete', 'create', 'update'],
                             'allow' => true,
                             'roles' => ['admin', 'manager'],
                         ],
@@ -121,5 +121,45 @@ class TaskController extends Controller
         $task->delete();
 
         return [];
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->getRequest();
+        $task = new Task();
+
+        if ($task->load($request->getBodyParams(), '') && $task->save()) {
+            Yii::$app->response->setStatusCode(201);
+            return $task->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $task->errors,
+            ];
+        }
+    }
+
+    public function actionUpdate($id)
+    {
+        $request = Yii::$app->getRequest();
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        if ($task->load($request->getBodyParams(), '') && $task->save()) {
+            Yii::$app->response->setStatusCode(200);
+            return $task->attributes;
+        } else {
+            Yii::$app->response->setStatusCode(400);
+            return [
+                'errors' => $task->errors,
+            ];
+        }
     }
 }

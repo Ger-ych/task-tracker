@@ -58,6 +58,7 @@ return [
             'rules' => [
                 'task/done/<id:\d+>' => 'task/done',
                 'task/delete/<id:\d+>' => 'task/delete',
+                'task/update/<id:\d+>' => 'task/update',
 
                 'project/delete/<id:\d+>' => 'project/delete',
                 'project/update/<id:\d+>' => 'project/update',
