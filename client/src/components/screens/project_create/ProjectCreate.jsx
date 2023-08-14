@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom';
 
-import { ProjectService } from '../../../services/project.service';
-import { useAuth } from "../../../hooks/useAuth"
+import { useProjectCreate } from './useProjectCreate';
 import { onlyAdminOrManager } from '../../../HOC/onlyAdminOrManager';
 
 import ErrorMessage from '../../ui/ErrorMessage'
@@ -12,41 +10,19 @@ import Header from '../../ui/Header';
 import '../../../assets/styles/form.css'
 
 const ProjectCreate = () => {
-    const { user } = useAuth();
-    const navigate = useNavigate();
-
     const [createError, setCreateError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const {register, reset, handleSubmit, formState: {errors}} = useForm({
+    const {register, handleSubmit, formState: {errors}} = useForm({
         mode: 'onChange'
-    })
-
-    const handleProjectCreate = async (formData) => {
-        try {
-            setIsLoading(true);
-            setCreateError('');
-
-            const response = await ProjectService.createProject(user.token, formData);
-        
-            if (response.status === 201) {
-                navigate("/projects");
-            }
-        }
-        catch(error) {
-            console.error(error.message);
-
-            setCreateError('Неизвестная ошибка! Убедитесь, что все поля заполнены корректно.');
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
+    });
+    
+    const { projectCreate } = useProjectCreate(setIsLoading, setCreateError);
     
     return (
         <main className="h-100 d-flex align-items-center justify-content-center flex-column">
             <Header />
-            <form className='form w-100 m-auto' onSubmit={handleSubmit(handleProjectCreate)}>
+            <form className='form w-100 m-auto' onSubmit={handleSubmit(projectCreate)}>
                 <div className="text-center">
                     <img className="mb-2" src="/favicon.png" alt="" width="54" height="54" />
                     <h1 className="h3 mb-3 fw-normal">Создание проекта</h1>
