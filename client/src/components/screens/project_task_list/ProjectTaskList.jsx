@@ -25,7 +25,7 @@ const ProjectTaskList = () => {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
                     <li className="breadcrumb-item"><Link to="/projects">Проекты</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">Задачи проекта {id}</li>
+                    <li className="breadcrumb-item active" aria-current="page">Задания проекта {id}</li>
                 </ol>
             </nav>
 
@@ -74,7 +74,7 @@ const ProjectTaskList = () => {
                             </div>
                         </div>
                     ))
-                    : <h3 className="">У этого проекта нет задач</h3>
+                    : <h3 className="">Для этого проекта нет заданий</h3>
                 }
                 </>
             )}

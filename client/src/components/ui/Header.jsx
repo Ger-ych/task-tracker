@@ -39,7 +39,7 @@ const Header = () => {
 
                         {isDeveloper() && (
                             <>
-                            <li><Link className="nav-link px-2 link-body-emphasis" to="/my-tasks">Мои задачи</Link></li>
+                            <li><Link className="nav-link px-2 link-body-emphasis" to="/my-tasks">Мои задания</Link></li>
                             </>
                         )}
                     </ul>

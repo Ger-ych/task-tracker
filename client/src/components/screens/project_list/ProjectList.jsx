@@ -41,7 +41,7 @@ const ProjectList = () => {
                                     <h3 className="mb-2">{project.id}. {project.name}</h3>
                                     <div className="mb-1 text-body-secondary">Репозиторий: <a href={project.repo_link}>{project.repo_link}</a></div>
                                     <div className="d-flex flex-column align-items-baseline">
-                                        <Link className='btn btn-sm btn-success mt-2' to={`/projects/${project.id}/tasks`}>Задачи »</Link>
+                                        <Link className='btn btn-sm btn-success mt-2' to={`/projects/${project.id}/tasks`}>Задания »</Link>
                                         <div className="d-flex">
                                         {disabledButtons[project.id] ? (
                                             <button className="btn btn-sm btn-danger mt-2" disabled>

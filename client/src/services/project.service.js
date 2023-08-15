@@ -31,7 +31,7 @@ export const ProjectService = {
             'Authorization': `Bearer ${access_token}`,
         }
 
-        const response = await axios.post(`${config.project_create_url}`, data, { headers });
+        const response = await axios.post(config.project_create_url, data, { headers });
         return response;
     },
     async updateProject(access_token, project_id, data) {
