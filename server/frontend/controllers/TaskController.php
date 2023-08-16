@@ -45,7 +45,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Lists all Task models.
+     * Lists user Task models.
      *
      * @return \yii\web\Response
      */

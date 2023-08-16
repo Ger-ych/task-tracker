@@ -1,7 +1,9 @@
 import axios from 'axios'
 import config from './config/config';
 
+
 export const AuthService = {
+    // Lofin function
     async login(data) {
         const headers = {
             'content-type': 'multipart/form-data',
@@ -10,6 +12,7 @@ export const AuthService = {
         const response = await axios.post(config.login_url, data, { headers });
         return response;
     },
+    // Function to get user info
     async getUserInfo(access_token) {
         const headers = {
             'Authorization': `Bearer ${access_token}`,
