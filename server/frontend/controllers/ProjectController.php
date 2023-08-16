@@ -13,6 +13,9 @@ use common\models\Project;
  */
 class ProjectController extends Controller
 {
+    /**
+     * @inheritDoc
+     */
     public function behaviors()
     {
         return array_merge(
@@ -35,6 +38,11 @@ class ProjectController extends Controller
         );
     }
 
+    /**
+     * Lists all Project models.
+     *
+     * @return \yii\web\Response
+     */
     public function actionList()
     {
         $projects = Project::find()->orderBy(['id' => SORT_DESC])->all();
@@ -42,6 +50,12 @@ class ProjectController extends Controller
         return $projects;
     }
 
+    /**
+     * Displays a single Project model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionView($id)
     {
         $project = Project::findOne($id);
@@ -57,6 +71,12 @@ class ProjectController extends Controller
         return $project;
     }
 
+    /**
+     * Deletes an existing Project model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionDelete($id)
     {
         $project = Project::findOne($id);
@@ -74,6 +94,11 @@ class ProjectController extends Controller
         return [];
     }
 
+    /**
+     * Creates a new Project model.
+     * 
+     * @return \yii\web\Response
+     */
     public function actionCreate()
     {
         $request = Yii::$app->getRequest();
@@ -90,6 +115,12 @@ class ProjectController extends Controller
         }
     }
 
+    /**
+     * Updates an existing Project model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionUpdate($id)
     {
         $request = Yii::$app->getRequest();

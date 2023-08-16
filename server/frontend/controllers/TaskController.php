@@ -14,6 +14,9 @@ use common\models\Task;
  */
 class TaskController extends Controller
 {
+    /**
+     * @inheritDoc
+     */
     public function behaviors()
     {
         return array_merge(
@@ -41,10 +44,15 @@ class TaskController extends Controller
         );
     }
 
+    /**
+     * Lists all Task models.
+     *
+     * @return \yii\web\Response
+     */
     public function actionList()
     {
         $user = Yii::$app->user->identity;
-        $tasks = $user->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
+        $tasks = $user->getTasks()->orderBy(['is_done' => SORT_ASC])->all(); // type: ignore
 
         $tasksWithProject = [];
         foreach ($tasks as $task) {
@@ -63,6 +71,55 @@ class TaskController extends Controller
         return $tasksWithProject;
     }
 
+    /**
+     * Lists Task models for a project.
+     * If the Project model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
+    public function actionListByProject($id)
+    {
+        $project = Project::findOne($id);
+        if (!$project) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого проекта не существует.',
+            ];
+        }
+
+        $tasks = $project->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
+
+        return $tasks;
+    }
+
+    /**
+     * Displays a single Task model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
+    public function actionView($id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            Yii::$app->response->setStatusCode(404);
+            
+            return [
+                'error' => 'Такого задания не существует.',
+            ];
+        }
+
+        return $task;
+    }
+
+    /**
+     * Set done existing Task model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionDone($id)
     {
         $task = Task::findOne($id);
@@ -90,22 +147,12 @@ class TaskController extends Controller
         return [];
     }
 
-    public function actionListByProject($id)
-    {
-        $project = Project::findOne($id);
-        if (!$project) {
-            Yii::$app->response->setStatusCode(404);
-            
-            return [
-                'error' => 'Такого проекта не существует.',
-            ];
-        }
-
-        $tasks = $project->getTasks()->orderBy(['is_done' => SORT_ASC])->all();
-
-        return $tasks;
-    }
-
+    /**
+     * Deletes an existing Task model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionDelete($id)
     {
         $task = Task::findOne($id);
@@ -123,6 +170,11 @@ class TaskController extends Controller
         return [];
     }
 
+    /**
+     * Creates a new Task model.
+     * 
+     * @return \yii\web\Response
+     */
     public function actionCreate()
     {
         $request = Yii::$app->getRequest();
@@ -139,6 +191,12 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Updates an existing Task model.
+     * If the model cannot be found, the status 404 will be returned.
+     * @param int $id ID
+     * @return \yii\web\Response
+     */
     public function actionUpdate($id)
     {
         $request = Yii::$app->getRequest();
@@ -161,20 +219,5 @@ class TaskController extends Controller
                 'errors' => $task->errors,
             ];
         }
-    }
-
-    public function actionView($id)
-    {
-        $task = Task::findOne($id);
-
-        if (!$task) {
-            Yii::$app->response->setStatusCode(404);
-            
-            return [
-                'error' => 'Такого задания не существует.',
-            ];
-        }
-
-        return $task;
     }
 }

@@ -13,6 +13,9 @@ use yii\web\Controller;
  */
 class AuthController extends Controller
 {
+    /**
+     * @inheritDoc
+     */
     public function behaviors()
     {
         return [
@@ -38,6 +41,11 @@ class AuthController extends Controller
         ];
     }
 
+    /**
+     * Login with username and password.
+     * If the username or password is incorrect, the status 401 will be returned.
+     * @return \yii\web\Response
+     */
     public function actionLogin()
     {   
         $request = Yii::$app->getRequest();
@@ -69,6 +77,11 @@ class AuthController extends Controller
         ];
     }
 
+     /**
+     * Getting information about a user
+     * 
+     * @return \yii\web\Response
+     */
     public function actionInfo()
     {
         $user = Yii::$app->user->identity;

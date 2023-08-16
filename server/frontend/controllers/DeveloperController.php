@@ -13,6 +13,9 @@ use yii\filters\AccessControl;
  */
 class DeveloperController extends Controller
 {
+    /**
+     * @inheritDoc
+     */
     public function behaviors()
     {
         return array_merge(
@@ -35,6 +38,11 @@ class DeveloperController extends Controller
         );
     }
 
+    /**
+     * List of all users with the 'developer' role
+     * 
+     * @return \yii\web\Response
+     */
     public function actionList()
     {
         $developers = Yii::$app->authManager->getUserIdsByRole('developer');

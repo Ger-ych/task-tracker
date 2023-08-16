@@ -1,4 +1,5 @@
 <?php
+
 namespace console\controllers;
 
 use Yii;
@@ -6,9 +7,16 @@ use yii\console\Controller;
 use common\models\User;
 use yii\helpers\Console;
 
+/**
+ * Rbac controller
+ */
 class RbacController extends Controller
 {
-    // Initial setup of RBAC roles
+    /**
+     * Initial configuration of RBAC roles
+     * 
+     * @return int
+     */
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
@@ -51,10 +59,16 @@ class RbacController extends Controller
 
         if (!$auth->hasChild($admin, $canAdmin)) {
             $auth->addChild($admin, $canAdmin);
-        } 
+        }
+
+        return 0;
     }
 
-    // Creating an administrator
+    /**
+     * Creating a user with the 'admin' role
+     * 
+     * @return int
+     */
     public function actionCreateAdmin($username, $email, $password)
     {
         $user = new User([
