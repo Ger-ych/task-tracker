@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Form validation error component
 const ErrorMessage = ({ error }) => {
     if (!error) return null
 
