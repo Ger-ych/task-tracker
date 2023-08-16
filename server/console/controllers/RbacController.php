@@ -8,6 +8,7 @@ use yii\helpers\Console;
 
 class RbacController extends Controller
 {
+    // Initial setup of RBAC roles
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
@@ -53,6 +54,7 @@ class RbacController extends Controller
         } 
     }
 
+    // Creating an administrator
     public function actionCreateAdmin($username, $email, $password)
     {
         $user = new User([
