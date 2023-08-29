@@ -26,8 +26,8 @@ services:
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
+      - MYSQL_DATABASE=tasktracker
+      - MYSQL_USER=tasktracker
       - MYSQL_PASSWORD=secret
 
   #pgsql:
