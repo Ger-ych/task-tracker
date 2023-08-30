@@ -61,3 +61,9 @@ services:
       - backend
       - mysql
       - phpmyadmin
+  
+  react-app:
+    build:
+      context: ./client
+    ports:
+      - "8000:80"

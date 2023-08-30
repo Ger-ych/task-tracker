@@ -1,6 +1,6 @@
 // Server domains
-export const admin_domain = 'http://admin.tasktracker.loc'
-export const domain = 'http://api.tasktracker.loc'
+export const admin_domain = 'http://localhost:21080'
+export const domain = 'http://localhost:20080'
 
 // Server urls
 const config = {    
