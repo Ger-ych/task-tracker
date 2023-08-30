@@ -40,3 +40,24 @@ services:
       - 8080:80
     links:
       - mysql:db
+
+  migrate:
+    build:
+      context: ./server/backend
+    command: sh -c "
+      apt-get update && apt-get install -y netcat && 
+      
+      while ! nc -z mysql 3306; do sleep 1; done &&
+      php yii migrate --interactive=0 && 
+      php yii migrate --migrationPath=@yii/rbac/migrations --interactive=0 && 
+      php yii rbac/init"
+    volumes:
+      # Re-use local composer cache via host-volume
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      # Mount source-code for development
+      - ./server:/app
+    depends_on:
+      - frontend
+      - backend
+      - mysql
+      - phpmyadmin
